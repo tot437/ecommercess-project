@@ -21,7 +21,7 @@ export default function HomePage() {
                 <button type="button" className="search-button">
                   <img className="search-icon" src="./public/images/icons/search-icon.png" alt="Search" />
                 </button>
-                <a className="orders-link header-link" href="orders.html">
+                <a className="orders-link header-link" href="/orders">
 
                   <span className="orders-text">Orders</span>
                 </a>
