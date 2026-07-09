@@ -1,40 +1,13 @@
 import { Link } from 'react-router';
-import './header.css'
+import Header from '../commponents/header';
 import './Orders.css'
 
 export default function OrdersPage() {
   return (
     <>
+    <Header />
     <title>Ecommerce Project</title>
-      <div className="header">
-        <div className="left-section">
-          <a href="index.html" className="header-link">
-            <img className="logo" src="images/logo-white.png" alt="Logo" />
-            <img className="mobile-logo" src="images/mobile-logo-white.png" alt="Mobile Logo" />
-          </a>
-            </div>
-
-            <div className="middle-section">
-              <input className="search-bar" type="text" placeholder="Search" />
-
-                <button className="search-button">
-                  <img className="search-icon" src="images/icons/search-icon.png" alt="Search" />
-                </button>
-            </div>
-
-            <div className="right-section">
-              <a className="orders-link header-link" href="/orders">
-
-                <span className="orders-text">Orders</span>
-              </a>
-
-              <a className="cart-link header-link" href="/checkout">
-                <img className="cart-icon" src="images/icons/cart-icon.png" alt="Cart" />
-                  <div className="cart-quantity">3</div>
-                  <div className="cart-text">Cart</div>
-              </a>
-            </div>
-        </div>
+     
 
         <div className="orders-page">
           <div className="page-title">Your Orders</div>
