@@ -21,10 +21,10 @@ export default function HomePage() {
                 <button type="button" className="search-button">
                   <img className="search-icon" src="./public/images/icons/search-icon.png" alt="Search" />
                 </button>
-                <a className="orders-link header-link" href="/orders">
+                <Link className="orders-link header-link" to="/orders">
 
                   <span className="orders-text">Orders</span>
-                </a>
+                </Link>
 
                 <Link className="cart-link header-link" to="/checkout">
                   <img className="cart-icon" src="./public/images/icons/cart-icon.png" alt="Cart" />
