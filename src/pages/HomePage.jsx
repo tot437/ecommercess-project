@@ -1,16 +1,18 @@
+import { Link } from 'react-router';
 import './homepages.css';
 import './header.css';
-import './generated.css';
 
-export function HomePage() {
+
+export default function HomePage() {
   return (
     <>
+      <title>Ecommerce Project</title>
       <div className="header">
             <div className="left-section">
-          <a href="index.html" className="header-link" aria-label="Home">
+          <Link to="/" className="header-link" aria-label="Home">
             <img className="logo" src="./public/images/logo-white.png" alt="Home" />
             <img className="mobile-logo" src="./public/images/mobile-logo-white.png" alt="Home" />
-          </a>
+          </Link>
         </div>
 
             <div className="middle-section">
@@ -24,11 +26,11 @@ export function HomePage() {
                   <span className="orders-text">Orders</span>
                 </a>
 
-                <a className="cart-link header-link" href="checkout.html">
+                <Link className="cart-link header-link" to="/checkout">
                   <img className="cart-icon" src="./public/images/icons/cart-icon.png" alt="Cart" />
                     <div className="cart-quantity">3</div>
                     <div className="cart-text">Cart</div>
-                </a>
+                </Link>
             </div>
         </div>
 
