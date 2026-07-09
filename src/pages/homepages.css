@@ -7,9 +7,6 @@
     grid-template-columns: repeat(8, 1fr);
 }
 
-
-/* التنسيقات المتجاوبة كما هي */
-
 @media (max-width: 2000px) {
     .home-page .products-grid {
         grid-template-columns: repeat(7, 1fr);
@@ -57,7 +54,6 @@
     padding-bottom: 25px;
     padding-left: 25px;
     padding-right: 25px;
-    /* الحدود المستخدمة في الصورة تفصل بين المنتجات بشكل شبكي */
     border-right: 1px solid rgb(230, 230, 230);
     border-bottom: 1px solid rgb(230, 230, 230);
     display: flex;
@@ -98,7 +94,6 @@
 
 .home-page .product-rating-count {
     color: rgb(25, 135, 84);
-    /* هذا هو اللون الأخضر الحقيقي المستخدم في صورة المشروع النهائي (وليس التركواز) */
     cursor: auto;
     margin-top: 3px;
     font-size: 15px;
@@ -138,7 +133,6 @@
     height: 36px;
     margin-top: 1px;
     background-color: rgb(25, 135, 84);
-    /* هذا هو اللون الأخضر المستخدم فعليًا في صورة المشروع النهائي، وليس الأصفر */
     color: rgb(255, 255, 255);
     border: none;
     border-radius: 8px;
