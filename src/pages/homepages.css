@@ -113,7 +113,7 @@
     flex: 1;
 }
 
-.home-page .added-to-cart {
+.home-page .added-to-cartItems {
     color: rgb(25, 135, 84);
     font-size: 16px;
     display: flex;
@@ -122,12 +122,12 @@
     opacity: 0;
 }
 
-.home-page .added-to-cart img {
+.home-page .added-to-cartItems img {
     height: 19px;
     margin-right: 6px;
 }
 
-.home-page .add-to-cart-button {
+.home-page .add-to-cartItems-button {
     width: 100%;
     padding: 8px;
     height: 36px;
@@ -140,6 +140,6 @@
     cursor: pointer;
 }
 
-.home-page .add-to-cart-button:hover {
+.home-page .add-to-cartItems-button:hover {
     background-color: rgb(20, 115, 71);
 }

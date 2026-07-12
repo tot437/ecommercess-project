@@ -1,13 +1,12 @@
-import { Link } from 'react-router';
-import Header from '../commponents/header';
-import './Orders.css'
+import { Link } from 'react-router-dom';
+import Header from '../components/header'
+import './Orders.css';
 
-export default function OrdersPage() {
+export default function OrdersPage({ cartItems }) {
   return (
     <>
-    <Header />
-    <title>Ecommerce Project</title>
-     
+      <Header cartItems={cartItems} />
+      <title>Ecommerce Project</title>
 
         <div className="orders-page">
           <div className="page-title">Your Orders</div>
@@ -50,7 +49,7 @@ export default function OrdersPage() {
                   </div>
                   <button className="buy-again-button button-primary">
                     <img className="buy-again-icon" src="images/icons/buy-again.png" alt="Buy Again" />
-                      <span className="buy-again-message">Add to Cart</span>
+                      <span className="buy-again-message">Add to cartItems</span>
                   </button>
                 </div>
 
@@ -81,7 +80,7 @@ export default function OrdersPage() {
                   </div>
                   <button className="buy-again-button button-primary">
                     <img className="buy-again-icon" src="images/icons/buy-again.png" alt="Buy Again" />
-                      <span className="buy-again-message">Add to Cart</span>
+                      <span className="buy-again-message">Add to cartItems</span>
                   </button>
                 </div>
 
@@ -135,7 +134,7 @@ export default function OrdersPage() {
                   </div>
                   <button className="buy-again-button button-primary">
                     <img className="buy-again-icon" src="images/icons/buy-again.png" alt="Buy Again" />
-                      <span className="buy-again-message">Add to Cart</span>
+                      <span className="buy-again-message">Add to cartItems</span>
                   </button>
                 </div>
 

@@ -1,24 +1,35 @@
-import { useEffect, useState } from 'react';
+
 import './homepages.css';
-import Header from '../commponents/header';
-import products from '../../products'; 
-import axios from 'axios';
+import Header from '../components/header';
+import '../components/header.css'
+import Products from '../../products'
+import formatMony from '../utills/money';
 
-export default function HomePage() {
-  const [Products, setProducts] = useState([]);
-  const [cart, setCart] = useState([]);
 
-  useEffect(() => {
-    setProducts(products);
-    axios.get('/api/cart-items').then((response) => {
-      setCart(response.data);
+
+export default function HomePage({ cartItems, setCart }) {
+  const addItemToCart = (product, quantity = 1) => {
+    if (typeof setCart !== 'function') return;
+
+    setCart((currentCart) => {
+      const safeCurrentCart = Array.isArray(currentCart) ? currentCart : [];
+      const existingItem = safeCurrentCart.find((item) => (item.productId ?? item.product?.id) === product.id);
+
+      if (existingItem) {
+        return safeCurrentCart.map((item) =>
+          (item.productId ?? item.product?.id) === product.id
+            ? { ...item, quantity: item.quantity + quantity }
+            : item
+        );
+      }
+
+      return [...safeCurrentCart, { productId: product.id, product, quantity }];
     });
-}, []);
+  };
 
   return (
     <>
-      <Header cart={cart}/>
-
+      <Header cartItems={cartItems} />
       <div className="home-page">
         <div className="products-grid">
           {Products.map((product) => {
@@ -32,21 +43,36 @@ export default function HomePage() {
                   <img className="product-rating-stars" src="./images/ratings/rating-45.png" alt="4.5 star rating" />
                   <div className="product-rating-count link-primary">{product.rating.count}</div>
                 </div>
-                <div className="product-price">$ {(product.priceCents / 100).toFixed(2)}</div>
+                <div className="product-price">{formatMony(product)}</div>
                 <div className="product-quantity-container">
-                  <select>
-                    <option value="1">1</option><option value="2">2</option><option value="3">3</option>
-                    <option value="4">4</option><option value="5">5</option><option value="6">6</option>
-                    <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+                  <select id={`qty-${product.id}`} defaultValue="1">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
                     <option value="10">10</option>
                   </select>
                 </div>
                 <div className="product-spacer"></div>
-                <div className="added-to-cart">
+                <div className="added-to-cartItems">
                   <img src="./images/icons/checkmark.png" alt="Checkmark" />
                   Added
                 </div>
-                <button className="add-to-cart-button button-primary">Add to Cart</button>
+                <button
+                  onClick={() => {
+                    const select = document.getElementById(`qty-${product.id}`);
+                    const quantity = Number(select?.value || 1);
+                    addItemToCart(product, quantity);
+                  }}
+                  className="add-to-cartItems-button button-primary"
+                >
+                  Add to cart
+                </button>
               </div>
             );
           })}
