@@ -1,5 +1,9 @@
+
 /* eslint-disable no-unused-vars */
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import dayjs from 'dayjs';
+import { useState, useEffect } from 'react';
 import './checkout-header.css';
 import './checkout.css';
 import './header.css';
@@ -14,6 +18,21 @@ function getProductById(productId) {
 
 export default function CheckoutPage({ cartItems: initialCartItems = [], setCart }) {
   const cartItems = Array.isArray(initialCartItems) ? initialCartItems : [];
+
+  // FIXED: Hooks moved to the top level
+  const [deliveryOptions, setDeliveryOptions] = useState([]);
+
+  useEffect(() => {
+    axios.get('/api/delivery-options?expand=estimatedDeliveryTime')
+      .then((response) => {
+        // Log the response to see the structure
+        // If the API returns an object with a property containing the array (e.g., response.data.options),
+        // update it to use that property.
+        // For now, let's ensure it's at least an array:
+        setDeliveryOptions(Array.isArray(response.data) ? response.data : []);
+      })
+      .catch((error) => console.error("Error fetching delivery options:", error));
+  }, []);
 
   const updateQuantity = (productId, change) => {
     if (typeof setCart !== 'function') return;
@@ -82,7 +101,9 @@ export default function CheckoutPage({ cartItems: initialCartItems = [], setCart
 
                 return (
                   <div key={cartItem.productId ?? `${product?.name ?? 'item'}-${index}`} className="cartItems-item-container">
-                    <div className="delivery-date">Delivery date: Tuesday, June 21</div>
+                    <div className="delivery-date">
+                      Delivery date: {/* You may want to find specific delivery logic here */}
+                    </div>
 
                     <div className="cartItems-item-details-grid">
                       <img className="product-image" src={imageSrc} alt={product?.name ?? 'Product'} />
@@ -94,41 +115,43 @@ export default function CheckoutPage({ cartItems: initialCartItems = [], setCart
                           <span>
                             Quantity: <span className="quantity-label">{cartItem.quantity}</span>
                           </span>
-                          <button type="button" className="update-quantity-link link-primary" onClick={() => decreaseQuantity(cartItem.productId ?? cartItem.product?.id)}>
-                            -
-                          </button>
-                          <button type="button" className="update-quantity-link link-primary" onClick={() => increaseQuantity(cartItem.productId ?? cartItem.product?.id)}>
-                            +
-                          </button>
-                          <button type="button" className="delete-quantity-link link-primary" onClick={() => removeItem(cartItem.productId ?? cartItem.product?.id)}>
-                            Delete
-                          </button>
+                          <button type="button" className="update-quantity-link link-primary" onClick={() => decreaseQuantity(cartItem.productId ?? cartItem.product?.id)}> - </button>
+                          <button type="button" className="update-quantity-link link-primary" onClick={() => increaseQuantity(cartItem.productId ?? cartItem.product?.id)}> + </button>
+                          <button type="button" className="delete-quantity-link link-primary" onClick={() => removeItem(cartItem.productId ?? cartItem.product?.id)}> Delete </button>
                         </div>
                       </div>
 
                       <div className="delivery-options">
                         <div className="delivery-options-title">Choose a delivery option:</div>
-                        <div className="delivery-option">
-                          <input type="radio" defaultChecked className="delivery-option-input" name={`delivery-option-${index}`} />
-                          <div>
-                            <div className="delivery-option-date">Tuesday, June 21</div>
-                            <div className="delivery-option-price">FREE Shipping</div>
-                          </div>
-                        </div>
-                        <div className="delivery-option">
-                          <input type="radio" className="delivery-option-input" name={`delivery-option-${index}`} />
-                          <div>
-                            <div className="delivery-option-date">Wednesday, June 15</div>
-                            <div className="delivery-option-price">$4.99 - Shipping</div>
-                          </div>
-                        </div>
-                        <div className="delivery-option">
-                          <input type="radio" className="delivery-option-input" name={`delivery-option-${index}`} />
-                          <div>
-                            <div className="delivery-option-date">Monday, June 13</div>
-                            <div className="delivery-option-price">$9.99 - Shipping</div>
-                          </div>
-                        </div>
+                        {deliveryOptions.map((option) => {
+                          let priceString = 'FREE Shipping';
+                          if (option.priceCents > 0) {
+                            priceString = `${formatMony(option)} - Shipping`;
+                          }
+                          return (
+                            <div key={option.id} className="delivery-option">
+                              <input
+                                type="radio"
+                                checked={option.id === cartItem.deliveryOptionId}
+                                className="delivery-option-input"
+                                name={`delivery-option-${cartItem.productId}`}
+                                onChange={() => { }} // Added to suppress controlled input warning
+                              />
+                              <div>
+                                <div className="delivery-options">
+                                  <div className="delivery-options-title">Choose a delivery option:</div>
+                                  {/* Add this check: */}
+                                  {Array.isArray(deliveryOptions) && deliveryOptions.map((option) => (
+                                    <div key={option.id} className="delivery-option">
+                                      {/* ... your input and divs ... */}
+                                    </div>
+                                  ))}
+                                </div>
+                                <div className="delivery-option-price">{priceString}</div>
+                              </div>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
@@ -139,32 +162,26 @@ export default function CheckoutPage({ cartItems: initialCartItems = [], setCart
 
           <div className="payment-summary">
             <div className="payment-summary-title">Payment Summary</div>
-
             <div className="payment-summary-row">
               <div>Items ({totalQuantity}):</div>
               <div className="payment-summary-money">{formatMony({ priceCents: subtotal })}</div>
             </div>
-
             <div className="payment-summary-row">
               <div>Shipping &amp; handling:</div>
               <div className="payment-summary-money">{formatMony({ priceCents: shipping })}</div>
             </div>
-
             <div className="payment-summary-row subtotal-row">
               <div>Total before tax:</div>
               <div className="payment-summary-money">{formatMony({ priceCents: subtotal + shipping })}</div>
             </div>
-
             <div className="payment-summary-row">
               <div>Estimated tax (10%):</div>
               <div className="payment-summary-money">{formatMony({ priceCents: tax })}</div>
             </div>
-
             <div className="payment-summary-row total-row">
               <div>Order total:</div>
               <div className="payment-summary-money">{formatMony({ priceCents: total })}</div>
             </div>
-
             <button className="place-order-button button-primary">Place your order</button>
           </div>
         </div>

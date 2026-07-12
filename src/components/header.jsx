@@ -32,7 +32,7 @@ export default function Header({ cartItems }) {
             <span className="orders-text">Orders</span>
           </Link>
           <Link className="cartItems-link header-link" to="/checkout">
-            <img className="cartItems-icon" src="/images/icons/cartItems-icon.png" alt="cartItems" />
+            <img className="cartItems-icon" src="../public\images\icons\cart-icon.png" alt="cartItems" />
             <div className="cartItems-quantity">{totalQuantity}</div>
             <div className="cartItems-text">cartItems</div>
           </Link>
