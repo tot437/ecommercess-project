@@ -10,9 +10,8 @@ export default function HomePage() {
 
   useEffect(() => {
     setProducts(products);
-    axios.get('http://localhost:5173/api/cart-items').then((response) => {
+    axios.get('/api/cart-items').then((response) => {
       setCart(response.data);
-     
     });
 }, []);
 

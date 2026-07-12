@@ -6,9 +6,12 @@ export default defineConfig({
     server: {
         proxy: {
             '/api': {
-                target: 'http://localhost:5000', // Make sure this matches your BACKEND port
+                target: 'http://localhost:5173', // Make sure this matches your BACKEND port
                 changeOrigin: true,
                 secure: false,
+            },
+            'images': {
+                target: 'http://localhost:5173'
             }
         }
     }
