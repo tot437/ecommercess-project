@@ -16,6 +16,7 @@ function getProductById(productId) {
   return products.find((product) => product.id === productId) ?? null;
 }
 
+// eslint-disable-next-line no-unused-vars
 export default function CheckoutPage({ cartItems = [], setCart }) {
   const [selectedOptions, setSelectedOptions] = useState({});
 
