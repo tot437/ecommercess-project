@@ -59,7 +59,7 @@ export default function OrdersPage() {
                         
                         {/* زر "Buy Again" */}
                         <button className="buy-again-button button-primary">
-                          <span className="buy-again-message">Add to tracking</span>
+                          <span className="buy-again-message">Add to Cart</span>
                         </button>
                       </div>
 
