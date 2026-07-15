@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import './checkout-header.css';
-import './checkout.css';
-import './header.css';
-import formatMony from '../utills/money';
-import Header from '../components/Header';
-import products from '../../products';
+import '../checkout/checkout-header.css';
+import '../checkout/checkout.css';
+import '../../pages/header.css';
+import formatMony from '../../utills/money';
+import Header from '../../components/Header';
+import products from '../../../products';
+import { useNavigate } from 'react-router-dom';
 
 const DELIVERY_OPTIONS = [
   { id: '1', date: 'Tuesday, April 22', priceCents: 0 },
@@ -16,31 +17,49 @@ function getProductById(productId) {
   return products.find((product) => product.id === productId) ?? null;
 }
 
-// eslint-disable-next-line no-unused-vars
 export default function CheckoutPage({ cartItems = [], setCart }) {
   const [selectedOptions, setSelectedOptions] = useState({});
+  const navigate = useNavigate();
 
-  const handleOptionChange = (productId, optionId) => {
-    setSelectedOptions(prev => ({ ...prev, [productId]: optionId }));
-  };
-
- 
+  // الحسابات يجب أن تكون في جسم المكون مباشرة
   const subtotalCents = cartItems.reduce((sum, item) => {
     const product = item.product ?? getProductById(item.productId);
     return sum + ((product?.priceCents ?? 0) * item.quantity);
   }, 0);
 
- 
   const shippingCents = cartItems.reduce((sum, item) => {
     const optionId = selectedOptions[item.productId] ?? '1';
     const option = DELIVERY_OPTIONS.find(o => o.id === optionId);
     return sum + (option?.priceCents ?? 0);
   }, 0);
 
- 
   const totalBeforeTaxCents = subtotalCents + shippingCents;
   const taxCents = Math.round(totalBeforeTaxCents * 0.1);
   const totalCents = totalBeforeTaxCents + taxCents;
+
+  const handleOptionChange = (productId, optionId) => {
+    setSelectedOptions(prev => ({ ...prev, [productId]: optionId }));
+  };
+
+  const placeOrder = () => {
+    const newOrder = {
+      id: Date.now().toString(),
+      orderTimeMs: Date.now(),
+      totalCents: totalCents,
+      products: cartItems.map(item => ({
+        ...item,
+        product: getProductById(item.productId),
+        estimatedDeliveryTimeMs: Date.now() + 86400000 
+      }))
+    };
+
+    const existingOrders = JSON.parse(localStorage.getItem('myOrders') || '[]');
+    const updatedOrders = [newOrder, ...existingOrders];
+    localStorage.setItem('myOrders', JSON.stringify(updatedOrders));
+
+    setCart([]);
+    navigate('/orders');
+  };
 
   return (
     <>
@@ -52,7 +71,6 @@ export default function CheckoutPage({ cartItems = [], setCart }) {
               const product = cartItem.product ?? getProductById(cartItem.productId);
               return (
                 <div key={cartItem.productId} className="cartItems-item-container">
-                 
                   <div className="cartItems-item-details-grid">
                     <img className="product-image" src={product?.image} alt={product?.name} />
                     <div className="cartItems-item-details">
@@ -60,7 +78,6 @@ export default function CheckoutPage({ cartItems = [], setCart }) {
                       <div className="product-price">{formatMony(product)}</div>
                       <div>Quantity: {cartItem.quantity}</div>
                     </div>
-                    
                     <div className="delivery-options">
                       <div className="delivery-options-title">Choose a delivery option:</div>
                       {DELIVERY_OPTIONS.map((option) => (
@@ -86,7 +103,6 @@ export default function CheckoutPage({ cartItems = [], setCart }) {
             })}
           </div>
 
-         
           <div className="payment-summary">
             <div className="payment-summary-title">Payment Summary</div>
             <div className="payment-summary-row">
@@ -109,7 +125,7 @@ export default function CheckoutPage({ cartItems = [], setCart }) {
               <div>Order total:</div>
               <div className="payment-summary-money">${(totalCents / 100).toFixed(2)}</div>
             </div>
-            <button className="place-order-button button-primary">Place your order</button>
+            <button className="place-order-button button-primary" onClick={placeOrder}>Place your order</button>
           </div>
         </div>
       </div>

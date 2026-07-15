@@ -1,9 +1,10 @@
 
-import './homepages.css';
-import Header from '../components/header';
-import '../components/header.css'
-import Products from '../../products'
-import formatMony from '../utills/money';
+import '../home/homepages.css';
+import Header from '../../components/header';
+import '../../components/header.css'
+import Products from '../../../products'
+import formatMony from '../../utills/money';
+
 
 
 

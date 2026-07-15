@@ -1,14 +1,15 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import HomePage from './pages/HomePage';
-import CheckoutPage from './pages/CheckoutPage';
-import OrdersPage from './pages/OrdersPage';
+import HomePage from './pages/home/HomePage';
+import CheckoutPage from './pages/checkout/CheckoutPage';
+import OrdersPage from './pages/orders/OrdersPage';
 import TrackingPage from './pages/tracking';
 import './App.css';
 
 function App() {
   const [cartItems, setCart] = useState([]);
+  const [orders, setOrders] = useState([]);
 
   const normalizeCart = (value) => {
     if (Array.isArray(value)) return value;
@@ -30,8 +31,10 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<HomePage cartItems={cartItems} setCart={setCart} />} />
-      <Route path="/checkout" element={<CheckoutPage cartItems={cartItems} setCart={setCart} />} />
-      <Route path="/orders" element={<OrdersPage cartItems={cartItems} />} />
+      <Route path="/checkout" element={ <CheckoutPage cartItems={cartItems} setCart={setCart} orders={orders}
+      setOrders={setOrders}
+    />}/>
+      <Route path="/orders" element={<OrdersPage cartItems={cartItems} orders={orders}/>}/>
       <Route path="/tracking" element={<TrackingPage />} />
     </Routes>
   );
