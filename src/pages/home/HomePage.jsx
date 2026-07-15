@@ -3,8 +3,7 @@ import React from 'react';
 import Header from '../../components/header';
 import ProductList from './productes'; 
 import products from '../../../products';
-import './homepages.css'; // تأكد أن الملف موجود في نفس المجلد
-import '../../components/header.css';// تأكد أن هذا المسار يجلب مصفوفة المنتجات بشكل صحيح
+import './homepages.css';
 
 export default function HomePage({ cartItems, setCart }) {
   
@@ -27,11 +26,10 @@ export default function HomePage({ cartItems, setCart }) {
     });
   };
 
-  return (
+ return (
     <>
       <Header cartItems={cartItems} />
       <div className="home-page">
-        {/* تم إزالة الخطأ هنا: قمنا بتمرير المصفوفة فقط للمكون */}
         <ProductList Products={products} addItemToCart={addItemToCart} />
       </div>
     </>
