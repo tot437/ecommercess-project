@@ -47,6 +47,7 @@ export default function Product({ Products }) {
 
               <button
                 className="add-to-cartItems-button button-primary"
+                data-testid="add-to-cart-botton"
                 onClick={() => {
                   const existingCart = JSON.parse(localStorage.getItem('myCart') || '[]');
 
