@@ -33,11 +33,9 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<HomePage cartItems={cartItems} setCart={setCart} />} />
-      <Route path="/checkout" element={ <CheckoutPage cartItems={cartItems} setCart={setCart} orders={orders}
-      setOrders={setOrders}
-    />}/>
+      <Route path="/checkout" element={ <CheckoutPage/>}/>
       <Route path="/orders" element={<OrdersPage cartItems={cartItems} orders={orders}/>}/>
-      <Route path="/tracking" element={<TrackingPage />} />
+      <Route path="/tracking" element={<TrackingPage cartItems={cartItems} />} />
     </Routes>
   );
 }

@@ -1,75 +1,75 @@
-import './tracking.css';
+import "./tracking.css";
+import { Link, useParams }   from "react-router-dom";
+import { useEffect, useState } from "react";
+import Header from "../components/Header";
+import dayjs from 'dayjs';
+
+
 export default function TrackingPage() {
+  const { productId } = useParams();
+  const [product, setProduct] = useState(null);
+
+  useEffect(() => {
+    const savedOrders = JSON.parse(localStorage.getItem('myOrders') || '[]');
+
+    let foundProduct = null;
+    for (const order of savedOrders) {
+      const match = order.products.find(
+        (p) => String(p.productId) === String(productId)
+      );
+      if (match) {
+        foundProduct = match;
+        break;
+      }
+    }
+    setProduct(foundProduct);
+  }, [productId]);
+
   return (
     <>
-    <title>Ecommerce Project</title>
-       <div className="header">
-        <div className="left-section">
-            <a href="/" className="header-link">
-                <img className="logo" src="images/logo-white.png" />
-                <img className="mobile-logo" src="images/mobile-logo-white.png" />
-            </a>
-        </div>
+      <Header />
 
-        <div className="middle-section">
-            <input className="search-bar" type="text" placeholder="Search" />
-
-            <button className="search-button">
-					<img className="search-icon" src="images/icons/search-icon.png" />
-				</button>
-        </div>
-
-        <div className="right-section">
-            <a className="orders-link header-link" href="/orders">
-
-                <span className="orders-text">Orders</span>
-            </a>
-
-            <a className="cartItems-link header-link" href="checkout.html">
-                <img className="cartItems-icon" src="images/icons/cartItems-icon.png" />
-                <div className="cartItems-quantity">3</div>
-                <div className="cartItems-text">cartItems</div>
-            </a>
-        </div>
-    </div>
-
-    <div className="tracking-page">
+      <div className="tracking-page">
         <div className="order-tracking">
-            <a className="back-to-orders-link link-primary" href="/orders">
-					View all orders
-				</a>
+          <Link className="back-to-orders-link link-primary" to="/orders">
+            View all orders
+          </Link>
 
-            <div className="delivery-date">
-                Arriving on Monday, June 13
-            </div>
+          {product ? (
+            <>
+              <div className="delivery-date">
+                Arriving on {dayjs(product.estimatedDeliveryTimeMs).format('dddd, MMMM D')}
+              </div>
 
-            <div className="product-info">
-                Black and Gray Athletic Cotton Socks - 6 Pairs
-            </div>
+              <div className="product-info">
+                {product.product?.name}
+              </div>
 
-            <div className="product-info">
-                Quantity: 1
-            </div>
+              <div className="product-info">
+                Quantity: {product.quantity}
+              </div>
 
-            <img className="product-image" src="images/products/athletic-cotton-socks-6-pairs.jpg" />
+              <img
+                className="product-image"
+                src={product.product?.image}
+                alt={product.product?.name}
+              />
 
-            <div className="progress-labels-container">
-                <div className="progress-label">
-                    Preparing
-                </div>
-                <div className="progress-label current-status">
-                    Shipped
-                </div>
-                <div className="progress-label">
-                    Delivered
-                </div>
-            </div>
+              <div className="progress-labels-container">
+                <div className="progress-label">Preparing</div>
+                <div className="progress-label current-status">Shipped</div>
+                <div className="progress-label">Delivered</div>
+              </div>
 
-            <div className="progress-bar-container">
+              <div className="progress-bar-container">
                 <div className="progress-bar"></div>
-            </div>
+              </div>
+            </>
+          ) : (
+            <p>لم يتم العثور على هذا المنتج ضمن طلباتك.</p>
+          )}
         </div>
-    </div>
+      </div>
     </>
   );
 }

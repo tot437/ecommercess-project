@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import React from 'react';
-import Header from '../../components/header';
+import Header from '../../components/Header';
 import ProductList from './productes'; 
 import products from '../../../products';
 import './homepages.css';

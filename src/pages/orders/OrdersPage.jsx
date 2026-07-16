@@ -1,15 +1,13 @@
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { useState, useEffect, Fragment } from 'react';
-import Header from '../../components/Header'; // تأكد من المسار الصحيح للمكون
+import Header from '../../components/Header';
 import './Orders.css';
 
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState([]);
-
   useEffect(() => {
-    // جلب الطلبات المحفوظة من المتصفح مباشرة
     const savedOrders = JSON.parse(localStorage.getItem('myOrders') || '[]');
     setOrders(savedOrders);
   }, []);
@@ -24,7 +22,6 @@ export default function OrdersPage() {
           {orders.length > 0 ? (
             orders.map((order) => (
               <div key={order.id} className="order-container">
-                {/* رأس الطلب */}
                 <div className="order-header">
                   <div className="order-header-left-section">
                     <div className="order-date">
@@ -42,7 +39,6 @@ export default function OrdersPage() {
                   </div>
                 </div>
 
-                {/* تفاصيل المنتجات داخل الطلب */}
                 <div className="order-details-grid">
                   {order.products.map((orderProduct) => (
                     <Fragment key={orderProduct.id || orderProduct.productId}>
@@ -57,13 +53,11 @@ export default function OrdersPage() {
                         </div>
                         <div className="product-quantity">Quantity: {orderProduct.quantity}</div>
                         
-                        {/* زر "Buy Again" */}
                         <button className="buy-again-button button-primary">
                           <span className="buy-again-message">Add to Cart</span>
                         </button>
                       </div>
 
-                      {/* زر التتبع الذي كنت تبحث عنه */}
                       <div className="product-actions">
                         <Link to={`/tracking/${orderProduct.productId}`}>
                           <button className="track-package-button button-secondary">

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState , useEffect} from 'react';
 import '../checkout/checkout-header.css';
 import '../checkout/checkout.css';
 import '../../pages/header.css';
@@ -18,10 +18,10 @@ function getProductById(productId) {
 }
 
 export default function CheckoutPage({ cartItems = [], setCart }) {
+
   const [selectedOptions, setSelectedOptions] = useState({});
   const navigate = useNavigate();
 
-  // الحسابات يجب أن تكون في جسم المكون مباشرة
   const subtotalCents = cartItems.reduce((sum, item) => {
     const product = item.product ?? getProductById(item.productId);
     return sum + ((product?.priceCents ?? 0) * item.quantity);
@@ -49,13 +49,14 @@ export default function CheckoutPage({ cartItems = [], setCart }) {
       products: cartItems.map(item => ({
         ...item,
         product: getProductById(item.productId),
-        estimatedDeliveryTimeMs: Date.now() + 86400000 
+        estimatedDeliveryTimeMs: Date.now() + 86400000
       }))
     };
 
     const existingOrders = JSON.parse(localStorage.getItem('myOrders') || '[]');
     const updatedOrders = [newOrder, ...existingOrders];
     localStorage.setItem('myOrders', JSON.stringify(updatedOrders));
+
 
     setCart([]);
     navigate('/orders');
@@ -67,9 +68,27 @@ export default function CheckoutPage({ cartItems = [], setCart }) {
       <div className="checkout-page">
         <div className="checkout-grid">
           <div className="order-summary">
+
             {cartItems.map((cartItem) => {
               const product = cartItem.product ?? getProductById(cartItem.productId);
+              // eslint-disable-next-line no-unused-vars
+              const cartItems = JSON.parse(localStorage.getItem('myCart') || '[]');
+              // eslint-disable-next-line no-unused-vars
+              const placeOrder = () => {
+                localStorage.removeItem('myCart');
+                navigate('/orders');
+              };
+              // eslint-disable-next-line react-hooks/rules-of-hooks
+              useEffect(() => {
+                if (cartItems.length === 0 && typeof setCart === 'function') {
+                  const savedCart = JSON.parse(localStorage.getItem('myCart') || '[]');
+                  if (savedCart.length > 0) {
+                    setCart(savedCart);
+                  }
+                }
+              }, []);
               return (
+
                 <div key={cartItem.productId} className="cartItems-item-container">
                   <div className="cartItems-item-details-grid">
                     <img className="product-image" src={product?.image} alt={product?.name} />
