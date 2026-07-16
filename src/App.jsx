@@ -11,6 +11,7 @@ import './App.css';
 
 function App() {
   const [cartItems, setCart] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [orders, setOrders] = useState([]);
 
   const normalizeCart = (value) => {
@@ -33,9 +34,9 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<HomePage cartItems={cartItems} setCart={setCart} />} />
-      <Route path="/checkout" element={ <CheckoutPage/>}/>
+      <Route path="/checkout" element={ <CheckoutPage cartItems={cartItems} setCart={setCart}/>}/>
       <Route path="/orders" element={<OrdersPage cartItems={cartItems} orders={orders}/>}/>
-      <Route path="/tracking" element={<TrackingPage cartItems={cartItems} />} />
+      <Route path="/tracking/:productId" element={<TrackingPage cartItems={cartItems} />} />
     </Routes>
   );
 }

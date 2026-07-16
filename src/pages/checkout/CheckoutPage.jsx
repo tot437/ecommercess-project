@@ -1,4 +1,4 @@
-import { useState , useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import '../checkout/checkout-header.css';
 import '../checkout/checkout.css';
 import '../../pages/header.css';
@@ -21,6 +21,16 @@ export default function CheckoutPage({ cartItems = [], setCart }) {
 
   const [selectedOptions, setSelectedOptions] = useState({});
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (cartItems.length === 0 && typeof setCart === 'function') {
+      const savedCart = JSON.parse(localStorage.getItem('myCart') || '[]');
+      if (savedCart.length > 0) {
+        setCart(savedCart);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const subtotalCents = cartItems.reduce((sum, item) => {
     const product = item.product ?? getProductById(item.productId);
@@ -57,7 +67,7 @@ export default function CheckoutPage({ cartItems = [], setCart }) {
     const updatedOrders = [newOrder, ...existingOrders];
     localStorage.setItem('myOrders', JSON.stringify(updatedOrders));
 
-
+    localStorage.removeItem('myCart');
     setCart([]);
     navigate('/orders');
   };
@@ -69,27 +79,11 @@ export default function CheckoutPage({ cartItems = [], setCart }) {
         <div className="checkout-grid">
           <div className="order-summary">
 
-            {cartItems.map((cartItem) => {
+            {cartItems.map((cartItem, index) => {
               const product = cartItem.product ?? getProductById(cartItem.productId);
-              // eslint-disable-next-line no-unused-vars
-              const cartItems = JSON.parse(localStorage.getItem('myCart') || '[]');
-              // eslint-disable-next-line no-unused-vars
-              const placeOrder = () => {
-                localStorage.removeItem('myCart');
-                navigate('/orders');
-              };
-              // eslint-disable-next-line react-hooks/rules-of-hooks
-              useEffect(() => {
-                if (cartItems.length === 0 && typeof setCart === 'function') {
-                  const savedCart = JSON.parse(localStorage.getItem('myCart') || '[]');
-                  if (savedCart.length > 0) {
-                    setCart(savedCart);
-                  }
-                }
-              }, []);
               return (
 
-                <div key={cartItem.productId} className="cartItems-item-container">
+                <div key={`${cartItem.productId}-${index}`} className="cartItems-item-container">
                   <div className="cartItems-item-details-grid">
                     <img className="product-image" src={product?.image} alt={product?.name} />
                     <div className="cartItems-item-details">
